@@ -1,8 +1,23 @@
-﻿var builder = WebApplication.CreateBuilder(args);
+﻿using Microsoft.EntityFrameworkCore;
+using Tasker;
+
+var folder = Environment.SpecialFolder.LocalApplicationData;
+var path = Environment.GetFolderPath(folder);
+
+var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<ToDoListContext>(options
+    => options.UseSqlite($"Data Source={Path.Join(path, "todo.db")}"));
+
+builder.Services.AddSwaggerGen();
+
+builder.Services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+{
+    builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+}));
 
 var app = builder.Build();
 
@@ -15,8 +30,12 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-app.UseRouting();
 
+app.UseSwagger();
+app.UseSwaggerUI();
+
+app.UseRouting();
+app.UseCors("MyPolicy");
 
 app.MapControllerRoute(
     name: "default",

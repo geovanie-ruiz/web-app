@@ -129,5 +129,8 @@
       }
     }
   },
-  "defaultProject": "Tasker"
+  "defaultProject": "Tasker",
+  "cli": {
+    "analytics": "a8ad9daa-7050-4cab-9a3f-a7fb9bb9d812"
+  }
 }
